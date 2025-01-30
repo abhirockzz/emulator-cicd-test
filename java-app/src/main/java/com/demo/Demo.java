@@ -22,7 +22,7 @@ public class Demo {
             throw new Exception("COSMOSDB_CONNECTION_STRING env variable is not set");
         }
 
-        System.out.println("connString === "+connString);
+        //System.out.println("connString === "+connString);
 
 
         String endpoint = null;
@@ -39,7 +39,7 @@ public class Demo {
         }
 
         System.out.println("endpoint === "+endpoint);
-        System.out.println("key === "+key);
+        //System.out.println("key === "+key);
 
 
         CosmosClient client = null;

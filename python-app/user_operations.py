@@ -16,7 +16,7 @@ class User:
 def create_user(container: ContainerProxy, user: User):
     try:
         container.create_item(body=user.to_dict())
-        print("Created user", user.to_dict())
+        print("Created user:", user.to_dict())
     except Exception as e:
         print("Error creating user", e)
         raise e
