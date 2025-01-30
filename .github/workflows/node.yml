@@ -1,0 +1,41 @@
+name: Node App CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'node-app/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'node-app/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      cosmosdb:
+        image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview
+        ports:
+          - 8081:8081
+
+    env:
+      COSMOSDB_CONNECTION_STRING: ${{ secrets.COSMOSDB_CONNECTION_STRING }}
+      COSMOSDB_DATABASE_NAME: ${{ vars.COSMOSDB_DATABASE_NAME }}
+      COSMOSDB_CONTAINER_NAME: ${{ vars.COSMOSDB_CONTAINER_NAME }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: cd node-app && npm install
+
+      - name: Run tests
+        run: cd node-app && npm test

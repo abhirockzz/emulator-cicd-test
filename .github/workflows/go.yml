@@ -1,0 +1,45 @@
+name: Go App CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'go-app/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'go-app/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      cosmosdb:
+        image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview
+        ports:
+          - 8081:8081
+        env:
+          PROTOCOL: https-insecure
+
+    env:
+      COSMOSDB_CONNECTION_STRING: ${{ secrets.COSMOSDB_CONNECTION_STRING }}
+      COSMOSDB_DATABASE_NAME: ${{ vars.COSMOSDB_DATABASE_NAME }}
+      COSMOSDB_CONTAINER_NAME: ${{ vars.COSMOSDB_CONTAINER_NAME }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23"
+
+      - name: Install dependencies
+        run: cd go-app && go mod download
+
+      - name: Run tests
+        run: cd go-app && go test -v ./...

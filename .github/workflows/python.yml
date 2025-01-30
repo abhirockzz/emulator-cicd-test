@@ -1,0 +1,43 @@
+name: Python App CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'python-app/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'python-app/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      cosmosdb:
+        image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview
+        ports:
+          - 8081:8081
+
+    env:
+      COSMOSDB_CONNECTION_STRING: ${{ secrets.COSMOSDB_CONNECTION_STRING }}
+      COSMOSDB_DATABASE_NAME: ${{ vars.COSMOSDB_DATABASE_NAME }}
+      COSMOSDB_CONTAINER_NAME: ${{ vars.COSMOSDB_CONTAINER_NAME }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: cd python-app && pip install -r requirements.txt
+
+      - name: Run tests
+        run: cd python-app && pytest -v
