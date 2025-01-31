@@ -30,10 +30,8 @@ public class UserOperationsTest {
         String key = connectionString.split(";")[1].split("=")[1];
         System.out.println("key === " + key);
 
-        CosmosClient client = null;
-
         try {
-            client = new CosmosClientBuilder()
+            this.client = new CosmosClientBuilder()
                     .endpoint(endpoint)
                     .key(key)
                     .gatewayMode()
@@ -69,8 +67,10 @@ public class UserOperationsTest {
 
     @AfterAll
     public void cleanup() {
-        database.delete();
+        this.database.delete();
         client.close();
+        System.out.println("deleted database: " + this.database.getId());
+
     }
 
     @Test
