@@ -78,12 +78,24 @@ func TestCreate(t *testing.T) {
 
 func TestReadItem(t *testing.T) {
     ctx := context.Background()
-	userID := "42"
+	
+	userID := "43"
+
+	var newUser = User{
+		ID: userID,
+		Email: "user43@test.com",
+		Active: true,
+	}
+
+	err := Create(ctx, container, newUser)
+    require.NoError(t, err)
 
     userItem, err := Read(ctx, container, userID)
 
     require.NoError(t, err)
 	require.Equal(t, userID, userItem.ID)
+	require.Equal(t, "user43@test.com", userItem.Email)
+	require.True(t, true, userItem.Active)
 }
 
 // func NewCosmosClient(connectionString string) (*azcosmos.Client, error) {

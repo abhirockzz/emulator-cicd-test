@@ -35,11 +35,20 @@ def test_create_user(cosmos_container):
         pytest.fail(f"create_user raised an exception: {e}")
 
 def test_read_user(cosmos_container):
-    test_user_id = "42"
+
+    test_user_id = "43"
+    test_user = User(id=test_user_id, email="user43@example.com", active=True)
+    
+    try:
+        create_user(cosmos_container, test_user)
+        print("User creation test complete")
+    except Exception as e:
+        pytest.fail(f"create_user raised an exception: {e}")
+
     user = read_user(cosmos_container, test_user_id)
     
     assert test_user_id == user.id
-    assert "user42@example.com" == user.email
+    assert "user43@example.com" == user.email
     assert user.active
     
     print("User read test complete")
