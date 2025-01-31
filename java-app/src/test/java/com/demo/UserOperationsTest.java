@@ -30,24 +30,41 @@ public class UserOperationsTest {
         String key = connectionString.split(";")[1].split("=")[1];
         System.out.println("key === " + key);
 
-        client = new CosmosClientBuilder()
-                .endpoint("https://localhost:8081/")
-                .key("C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw")
-                .gatewayMode()
-                .buildClient();
-
-        System.out.println("databaseName === " + databaseName);
-        System.out.println("containerName === " + containerName);
+        CosmosClient client = null;
 
         try {
-            client.createDatabaseIfNotExists(databaseName);
-            database.createContainerIfNotExists(containerName, "/id");
+            client = new CosmosClientBuilder()
+                    .endpoint(endpoint)
+                    .key(key)
+                    .gatewayMode()
+                    .buildClient();
+
         } catch (Exception e) {
+            System.out.println("create client object failed: " + e);
             throw e;
         }
 
-        this.database = client.getDatabase(databaseName);
-        this.container = this.database.getContainer(containerName);
+        CosmosDatabaseResponse createDBResponse = null;
+        try {
+            createDBResponse = client.createDatabaseIfNotExists(databaseName);
+        } catch (Exception e) {
+            System.out.println("create database failed: " + e.getMessage());
+            throw e;
+        }
+
+        this.database = client.getDatabase(createDBResponse.getProperties().getId());
+        System.out.println("created database: " + database.getId());
+
+        CosmosContainerResponse createContainerResponse = null;
+        try {
+            createContainerResponse = database.createContainerIfNotExists(containerName, "/country");
+        } catch (Exception e) {
+            System.out.println("create container failed: " + e.getMessage());
+            throw e;
+        }
+
+        this.container = this.database.getContainer(createContainerResponse.getProperties().getId());
+        System.out.println("created container: " + container.getId());
     }
 
     @AfterAll
