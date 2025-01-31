@@ -49,8 +49,5 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: cd java-app && mvn clean install
-
       - name: Run tests
         run: cd java-app && mvn test

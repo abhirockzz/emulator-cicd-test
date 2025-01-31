@@ -57,7 +57,7 @@ public class UserOperationsTest {
 
         CosmosContainerResponse createContainerResponse = null;
         try {
-            createContainerResponse = database.createContainerIfNotExists(containerName, "/country");
+            createContainerResponse = database.createContainerIfNotExists(containerName, "/id");
         } catch (Exception e) {
             System.out.println("create container failed: " + e.getMessage());
             throw e;
