@@ -53,4 +53,4 @@ jobs:
         run: cd java-app && mvn clean install
 
       - name: Run tests
-        run: cd java-app && java -jar target/cosmosdb-java-linux-emulator-example-1.0-SNAPSHOT.jar
+        run: cd java-app && mvn test
