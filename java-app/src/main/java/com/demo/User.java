@@ -2,7 +2,6 @@ package com.demo;
 
 import java.util.UUID;
 
-// User class with id, email, name and country fields
 public class User {
     private String id;
     private String email;
