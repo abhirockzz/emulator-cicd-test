@@ -3,6 +3,7 @@ import pytest
 from azure.cosmos import CosmosClient, PartitionKey
 from user_operations import create_user, read_user, User
 
+# dummy comment
 @pytest.fixture(scope="module")
 def cosmos_container():
     connection_string = os.getenv("COSMOSDB_CONNECTION_STRING")
