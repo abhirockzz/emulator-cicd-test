@@ -7,6 +7,8 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/data/azcosmos"
 )
 
+// User with ID, Email and Active fields
+
 type User struct {
     ID string `json:"id"`
     Email string `json:"email"`
