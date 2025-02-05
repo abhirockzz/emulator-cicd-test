@@ -21,8 +21,16 @@ namespace dotnet_app.Tests
             Console.WriteLine("databaseName: " + databaseName);
             Console.WriteLine("containerName: " + containerName);
 
+            CosmosClientOptions options = new()
+            {
+                HttpClientFactory = () => new HttpClient(new HttpClientHandler()
+                {
+                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                }),
+                ConnectionMode = ConnectionMode.Gateway,
+            };
 
-            client = new CosmosClient(connectionString);
+            client = new CosmosClient(connectionString, options);
             database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             container = await database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
