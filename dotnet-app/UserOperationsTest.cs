@@ -19,16 +19,16 @@ namespace dotnet_app.Tests
 
             connectionString = connectionString.Replace("http://", "https://");
 
-            // CosmosClientOptions options = new()
-            // {
-            //     HttpClientFactory = () => new HttpClient(new HttpClientHandler()
-            //     {
-            //         ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            //     }),
-            //     ConnectionMode = ConnectionMode.Gateway,
-            // };
+            CosmosClientOptions options = new()
+            {
+                HttpClientFactory = () => new HttpClient(new HttpClientHandler()
+                {
+                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                }),
+                ConnectionMode = ConnectionMode.Gateway,
+            };
 
-            client = new CosmosClient(connectionString);
+            client = new CosmosClient(connectionString, options);
             database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
             container = await database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
