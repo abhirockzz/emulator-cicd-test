@@ -17,9 +17,7 @@ namespace dotnet_app.Tests
             string databaseName = Environment.GetEnvironmentVariable("COSMOSDB_DATABASE_NAME");
             string containerName = Environment.GetEnvironmentVariable("COSMOSDB_CONTAINER_NAME");
 
-            Console.WriteLine("connectionString: " + connectionString);
-            Console.WriteLine("databaseName: " + databaseName);
-            Console.WriteLine("containerName: " + containerName);
+            connectionString = connectionString.Replace("http://", "https://");
 
             CosmosClientOptions options = new()
             {
