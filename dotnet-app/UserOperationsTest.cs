@@ -1,7 +1,5 @@
 using Microsoft.Azure.Cosmos;
 using NUnit.Framework;
-using System;
-using System.Threading.Tasks;
 
 namespace dotnet_app.Tests
 {

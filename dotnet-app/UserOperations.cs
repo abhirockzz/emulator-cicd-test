@@ -1,6 +1,4 @@
 using Microsoft.Azure.Cosmos;
-using System;
-using System.Threading.Tasks;
 
 namespace dotnet_app
 {

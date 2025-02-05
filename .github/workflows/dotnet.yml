@@ -44,8 +44,7 @@ jobs:
         run: |
           sudo apt update && sudo apt install -y openssl
           openssl s_client -connect localhost:8081 </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > cosmos_emulator.cert
-          cat cosmos_emulator.cert
-          dotnet dev-certs https --import cosmos_emulator.cert --trust
+          dotnet dev-certs https -ep ./cosmos_emulator.cert --trust --format Pem
 
       - name: Install dependencies
         run: cd dotnet-app && dotnet restore
