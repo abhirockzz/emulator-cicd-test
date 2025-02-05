@@ -4,9 +4,9 @@ namespace dotnet_app
 {
     public class User
     {
-        public string id { get; set; }
-        public string email { get; set; }
-        public bool active { get; set; }
+        public string? id { get; set; }
+        public string? email { get; set; }
+        public bool? active { get; set; }
 
 
         public override string ToString()

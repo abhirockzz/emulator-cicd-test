@@ -6,16 +6,18 @@ namespace dotnet_app.Tests
     [TestFixture]
     public class UserOperationsTest
     {
-        private CosmosClient client;
-        private Database database;
-        private Container container;
+        private CosmosClient? client;
+        private Database? database;
+        private Container? container;
 
         [OneTimeSetUp]
         public async Task Setup()
         {
-            string connectionString = Environment.GetEnvironmentVariable("COSMOSDB_CONNECTION_STRING");
-            string databaseName = Environment.GetEnvironmentVariable("COSMOSDB_DATABASE_NAME");
-            string containerName = Environment.GetEnvironmentVariable("COSMOSDB_CONTAINER_NAME");
+            string connectionString = Environment.GetEnvironmentVariable("COSMOSDB_CONNECTION_STRING") ?? throw new InvalidOperationException("COSMOSDB_CONNECTION_STRING environment variable is not set.");
+
+            string databaseName = Environment.GetEnvironmentVariable("COSMOSDB_DATABASE_NAME") ?? throw new InvalidOperationException("COSMOSDB_DATABASE_NAME environment variable is not set.");
+
+            string containerName = Environment.GetEnvironmentVariable("COSMOSDB_CONTAINER_NAME") ?? throw new InvalidOperationException("COSMOSDB_CONTAINER_NAME environment variable is not set.");
 
             connectionString = connectionString.Replace("http://", "https://");
 
@@ -39,9 +41,12 @@ namespace dotnet_app.Tests
         [OneTimeTearDown]
         public async Task Cleanup()
         {
-            await database.DeleteAsync();
-            client.Dispose();
-            Console.WriteLine("Deleted database: " + database.Id);
+            if (database != null)
+            {
+                await database.DeleteAsync();
+                Console.WriteLine("Deleted database: " + database.Id);
+            }
+            client?.Dispose();
         }
 
         [Test]
@@ -54,6 +59,10 @@ namespace dotnet_app.Tests
                 active = true
             };
 
+            if (container == null)
+            {
+                throw new InvalidOperationException("Container is not initialized.");
+            }
             Assert.DoesNotThrowAsync(async () => await UserOperations.CreateUserAsync(container, user));
         }
 
@@ -69,7 +78,12 @@ namespace dotnet_app.Tests
                 active = true
             };
 
-            await UserOperations.CreateUserAsync(container, user);
+            if (container == null)
+            {
+                throw new InvalidOperationException("Container is not initialized.");
+            }
+
+            Assert.DoesNotThrowAsync(async () => await UserOperations.CreateUserAsync(container, user));
 
             User readUser = await UserOperations.ReadUserAsync(container, userId);
             Assert.AreEqual(userId, readUser.id);
